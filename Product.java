@@ -10,10 +10,10 @@ public class Product {
         this.quantity = q;
     }
 
-    public Product()
-    {
+    // public Product()
+    // {
 
-    }
+    // }
 
     public void setItem(String Name)
     {

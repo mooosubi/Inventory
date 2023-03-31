@@ -1,7 +1,19 @@
 
 //Name: Enzo La
-//Date: 3-7-23
-//Project: Inventory
+//Date: 3-27-23
+//Project: Inventory Upgrade
+/*Create another class called qualityControl that inherits from
+the product class. The product class defined the product with three attributes-
+item, price and quantity.
+The qualityControl class extends the the product class with two more attributes. These attributes are
+customer satisfaction and product quality. Both of these properties will be integers on a scale of 1 to
+10.
+In order to use the quality control class, you will need to alter the existing Inventory class. The existing arraylist of type product is now inadequate 
+The arraylist needs now needs to be of type qualityControl. 
+Also the main interface class needs to be altered with two more textboxes so the user can enter the customer satisfaction and product quality.
+
+Create another method in the inventory class that returns and arraylist of products that have less than a 5 on their customer satisfaction or product quality.
+ */
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -24,12 +36,15 @@ public class Main extends JFrame implements ActionListener {
     JTextField txtItem = new JTextField(20);
     JTextField txtPrice = new JTextField(10);
     JTextField txtQuantity = new JTextField(10);
+    JTextField txtCusSatisfaction = new JTextField(10);
+    JTextField txtProQuality = new JTextField(10);
 
-    JTextArea txaOutput = new JTextArea("Item" + "\t" + "Price" + "\t" + "Quantity" + "\n", 10, 30);
+    JTextArea txaOutput = new JTextArea("Item" + "\t" + "Price" + "\t" + "Quantity" + "\n" + "Customer Satisfaction:  "
+            + "\t" + "Product Quality: ", 10, 30);
     JButton btnAdd = new JButton("Add item");
     JButton btnOutput = new JButton("Output Items");
 
-    ArrayList<Product> products = new ArrayList<Product>();
+    ArrayList<QualityControl> products = new ArrayList<QualityControl>();
     String itemString;
     int itemCount = 0;
 
@@ -55,6 +70,12 @@ public class Main extends JFrame implements ActionListener {
 
         add(new JLabel("Quantity: "));
         add(txtQuantity);
+
+        add(new JLabel("Customer Satisfaction: "));
+        add(txtCusSatisfaction);
+
+        add(new JLabel("Product Quality"));
+        add(txtProQuality);
         add(btnAdd);
         add(btnOutput);
         // add the text Area
@@ -66,12 +87,16 @@ public class Main extends JFrame implements ActionListener {
         txtItem.addActionListener(this);
         txtPrice.addActionListener(this);
         txtQuantity.addActionListener(this);
+        txtCusSatisfaction.addActionListener(this);
+        txtProQuality.addActionListener(this);
     }
 
     public void actionPerformed(ActionEvent event) {
         String itemName;
         double itemPrice;
         int itemQuantity;
+        int customSatisfaction;
+        int produQuality;
 
         Object objSource = event.getSource();
 
@@ -81,11 +106,15 @@ public class Main extends JFrame implements ActionListener {
                 itemName = txtItem.getText();
                 itemPrice = Double.parseDouble(txtPrice.getText());
                 itemQuantity = Integer.parseInt(txtQuantity.getText());
+                customSatisfaction = Integer.parseInt(txtCusSatisfaction.getText());
+                produQuality = Integer.parseInt(txtProQuality.getText());
 
-                Product theProduct = new Product();
+                QualityControl theProduct = new QualityControl();
                 theProduct.setItem(itemName);
                 theProduct.setPrice(itemPrice);
                 theProduct.setQuantity(itemQuantity);
+                theProduct.setCusSat(customSatisfaction);
+                theProduct.setPQuality(produQuality);
 
                 products.add(theProduct);
                 itemCount++;
@@ -94,7 +123,8 @@ public class Main extends JFrame implements ActionListener {
                 txtItem.setText("");
                 txtPrice.setText("");
                 txtQuantity.setText("");
-
+                txtCusSatisfaction.setText("");
+                txtProQuality.setText("");
                 // places cursor back to starting position
                 txtItem.requestFocus();
             } catch (NumberFormatException err) {
@@ -115,28 +145,32 @@ public class Main extends JFrame implements ActionListener {
                     String tempItem = products.get(iMax).getItem();
                     double tempPrice = products.get(iMax).getPrice();
                     int tempQuantity = products.get(iMax).getQuantity();
+                    int tempSatis = products.get(iMax).getCusSat();
+                    int tempQual = products.get(iMax).getProQua();
                     products.get(iMax).setItem(products.get(g - 1).getItem());
                     products.get(iMax).setPrice(products.get(g - 1).getPrice());
                     products.get(iMax).setQuantity(products.get(g - 1).getQuantity());
+                    products.get(iMax).setCusSat(products.get(g - 1).getCusSat());
+                    products.get(iMax).setPQuality(products.get(g - 1).getProQua());
                     products.get(g - 1).setItem(tempItem);
                     products.get(g - 1).setPrice(tempPrice);
                     products.get(g - 1).setQuantity(tempQuantity);
+                    products.get(g - 1).setCusSat(tempSatis);
+                    products.get(g - 1).setPQuality(tempQual);
                     System.out.println("sort");
 
                 }
-                //outputs arraylist
+                // outputs arraylist
                 for (int j = 0; j < products.size(); j++) {
                     txaOutput.append(products.get(j).getItem() + "\t" + products.get(j).getPrice() + "\t"
-                            + products.get(j).getQuantity() + "\n");
+                            + products.get(j).getQuantity() + "\n" + products.get(j).getCusSat() + "\t" + products.get(j).getProQua());
                 }
 
                 txaOutput.append("Items with less than 20 quantiy that need to be ordered" + "\n");
 
-                //outputs items with quantity less than 20
-                for(int l = 0; l < products.size(); l++)
-                {
-                    if(products.get(l).getQuantity() < 20)
-                    {
+                // outputs items with quantity less than 20
+                for (int l = 0; l < products.size(); l++) {
+                    if (products.get(l).getQuantity() < 20) {
                         txaOutput.append(products.get(l).getItem() + "\n");
                     }
                 }
