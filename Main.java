@@ -39,12 +39,14 @@ public class Main extends JFrame implements ActionListener {
     JTextField txtCusSatisfaction = new JTextField(10);
     JTextField txtProQuality = new JTextField(10);
 
-    JTextArea txaOutput = new JTextArea("Item" + "\t" + "Price" + "\t" + "Quantity" + "\n" + "Customer Satisfaction:  "
-            + "\t" + "Product Quality: ", 10, 30);
+    JTextArea txaOutput = new JTextArea("Item" + "\t" + "Price" + "\t" + "Quantity" + "\t" + "Customer Satisfaction:  "
+            + "\t" + "Product Quality: " + "\n", 10, 30);
     JButton btnAdd = new JButton("Add item");
     JButton btnOutput = new JButton("Output Items");
 
     ArrayList<QualityControl> products = new ArrayList<QualityControl>();
+    ArrayList<QualityControl> productsLessThan5 = new ArrayList<QualityControl>();
+    
     String itemString;
     int itemCount = 0;
 
@@ -109,12 +111,7 @@ public class Main extends JFrame implements ActionListener {
                 customSatisfaction = Integer.parseInt(txtCusSatisfaction.getText());
                 produQuality = Integer.parseInt(txtProQuality.getText());
 
-                QualityControl theProduct = new QualityControl();
-                theProduct.setItem(itemName);
-                theProduct.setPrice(itemPrice);
-                theProduct.setQuantity(itemQuantity);
-                theProduct.setCusSat(customSatisfaction);
-                theProduct.setPQuality(produQuality);
+                QualityControl theProduct = new QualityControl(itemName, itemPrice, itemQuantity, customSatisfaction, produQuality);
 
                 products.add(theProduct);
                 itemCount++;
@@ -163,10 +160,10 @@ public class Main extends JFrame implements ActionListener {
                 // outputs arraylist
                 for (int j = 0; j < products.size(); j++) {
                     txaOutput.append(products.get(j).getItem() + "\t" + products.get(j).getPrice() + "\t"
-                            + products.get(j).getQuantity() + "\n" + products.get(j).getCusSat() + "\t" + products.get(j).getProQua());
+                            + products.get(j).getQuantity() + "\t" + "\t"+ products.get(j).getCusSat() + "\t" + products.get(j).getProQua() + "\n");
                 }
 
-                txaOutput.append("Items with less than 20 quantiy that need to be ordered" + "\n");
+                //txaOutput.append("Items with less than 20 quantiy that need to be ordered" + "\n");
 
                 // outputs items with quantity less than 20
                 for (int l = 0; l < products.size(); l++) {
@@ -174,6 +171,18 @@ public class Main extends JFrame implements ActionListener {
                         txaOutput.append(products.get(l).getItem() + "\n");
                     }
                 }
+                txaOutput.append("Items with customer satisfaction or product quality less than 5" + "\n");
+                for(int h = 0; h < products.size();h++)
+                {
+                    if(products.get(h).getCusSat() < 5 || products.get(h).getProQua() < 5)
+                    {
+                        QualityControl badProduct = new QualityControl(products.get(h).getItem(), products.get(h).getPrice(), products.get(h).getQuantity(), products.get(h).getCusSat(), products.get(h).getProQua());
+                        productsLessThan5.add(badProduct);
+                        txaOutput.append(productsLessThan5.get(h).getItem() + "\t" + productsLessThan5.get(h).getPrice() + "\t"
+                        + productsLessThan5.get(h).getQuantity() + "\t" + "\t" + productsLessThan5.get(h).getCusSat() + "\t" + productsLessThan5.get(h).getProQua() + "\n");
+                    }
+                }
+
 
             } else {
 
